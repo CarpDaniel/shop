@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,7 @@ public class Order {
     @Embedded
     private Address address;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<OrderDetail> orderDetail = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -35,4 +36,7 @@ public class Order {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Customer customer;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date orderDate;
 }

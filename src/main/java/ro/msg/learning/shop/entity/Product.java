@@ -35,8 +35,8 @@ public class Product {
     @JoinColumn(name = "product_category_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-
     private ProductCategory productCategory;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "supplier_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

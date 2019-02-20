@@ -9,6 +9,7 @@ import ro.msg.learning.shop.repository.StockRepository;
 import ro.msg.learning.shop.strategy.LocationStrategy;
 import ro.msg.learning.shop.struct.StructOrder;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,9 @@ public class OrderService {
             //attach delivery address, shipment location and customer
             res.setAddress(order.getDeliveryAddress());
             res.setShippedFrom(location.getId().intValue());
+            res.setOrderDate(new Date());
+
+            //proper customer will be set after security implementation is done, use dummy 'til then
             res.setCustomer(customerRepository.save(new Customer("Erica", "Alvarez", "EaZ")));
 
             return orderRepository.save(res);
