@@ -4,10 +4,10 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import ro.msg.learning.shop.exception.RecoverableException;
+import ro.msg.learning.shop.messages.ExceptionTextTemplate;
 import ro.msg.learning.shop.util.CSVJacksonUtil;
 
 import java.io.IOException;
@@ -22,19 +22,31 @@ public class JacksonMessageConverter<T> extends AbstractGenericHttpMessageConver
     public JacksonMessageConverter() {super(new MediaType("text", "csv"));}
 
     @Override
-    protected void writeInternal(List<T> ts, Type type, HttpOutputMessage httpOutputMessage) throws IOException, HttpMessageNotWritableException {
+    protected void writeInternal(List<T> ts, Type type, HttpOutputMessage httpOutputMessage) {
         Class classType = (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
-        CSVJacksonUtil.toCSV(ts, httpOutputMessage.getBody(), classType);
+        try {
+            CSVJacksonUtil.toCSV(ts, httpOutputMessage.getBody(), classType);
+        } catch (IOException e) {
+            throw new RecoverableException(ExceptionTextTemplate.ETT_IO_EXCEPTION);
+        }
     }
 
     @Override
-    protected List<T> readInternal(Class aClass, HttpInputMessage httpInputMessage) throws IOException, HttpMessageNotReadableException {
-        return CSVJacksonUtil.fromCSV(aClass, httpInputMessage.getBody());
+    protected List<T> readInternal(Class aClass, HttpInputMessage httpInputMessage) {
+        try {
+            return CSVJacksonUtil.fromCSV(aClass, httpInputMessage.getBody());
+        } catch (IOException e) {
+            throw new RecoverableException(ExceptionTextTemplate.ETT_IO_EXCEPTION);
+        }
     }
 
     @Override
-    public List<T> read(Type type, Class aClass, HttpInputMessage httpInputMessage) throws IOException, HttpMessageNotReadableException {
-        return CSVJacksonUtil.fromCSV(aClass, httpInputMessage.getBody());
+    public List<T> read(Type type, Class aClass, HttpInputMessage httpInputMessage) {
+        try {
+            return CSVJacksonUtil.fromCSV(aClass, httpInputMessage.getBody());
+        } catch (IOException e) {
+            throw new RecoverableException(ExceptionTextTemplate.ETT_IO_EXCEPTION);
+        }
     }
 
     @Override

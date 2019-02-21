@@ -3,6 +3,7 @@ package ro.msg.learning.shop.strategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.entity.Location;
+import ro.msg.learning.shop.exception.LocationNotFoundException;
 import ro.msg.learning.shop.repository.LocationRepository;
 import ro.msg.learning.shop.repository.StockRepository;
 
@@ -27,8 +28,7 @@ public class AllInOneLocationStrategy implements LocationStrategy {
         for (Entry entry : productsAndQuantity.entrySet()) {
             suitableLocations.addAll(stockRepository.findLocationByProductAndQuantity((Integer) entry.getKey(), (Integer) entry.getValue()));
             if (suitableLocations.isEmpty())
-                return null;
-            break;
+                throw new LocationNotFoundException();
         }
 
         for (Entry entry : productsAndQuantity.entrySet()) {

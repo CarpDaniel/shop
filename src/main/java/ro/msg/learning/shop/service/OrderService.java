@@ -3,6 +3,7 @@ package ro.msg.learning.shop.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.entity.*;
+import ro.msg.learning.shop.exception.OrderNotCreatedException;
 import ro.msg.learning.shop.repository.CustomerRepository;
 import ro.msg.learning.shop.repository.OrderRepository;
 import ro.msg.learning.shop.repository.StockRepository;
@@ -55,6 +56,6 @@ public class OrderService {
 
             return orderRepository.save(res);
         }
-        return null;
+        throw new OrderNotCreatedException();
     }
 }
