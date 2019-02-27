@@ -29,9 +29,10 @@ public class Order {
     private Address address;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "ORDER_DETAIL", joinColumns = @JoinColumn(name = "ORDER_ID"))
     private List<OrderDetail> orderDetail = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore

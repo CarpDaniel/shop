@@ -52,7 +52,7 @@ public class OrderService {
             res.setOrderDate(new Date());
 
             //proper customer will be set after security implementation is done, use dummy 'til then
-            res.setCustomer(customerRepository.save(new Customer("Erica", "Alvarez", "EaZ")));
+            res.setCustomer(customerRepository.save(new Customer("Erica", "Alvarez", "DanyC")));
 
             return orderRepository.save(res);
         }

@@ -7,9 +7,14 @@ import ro.msg.learning.shop.entity.Order;
 import java.util.Date;
 import java.util.List;
 
-public interface OrderRepository extends CrudRepository <Order, Long> {
+public interface OrderRepository extends CrudRepository<Order, Long> {
 
     List<Order> findByCustomer(Customer customer);
 
     List<Order> findAllByOrderDateIsBetween(Date start, Date end);
+
+    List<Order> findAll();
+
+    Order findOrderById(Long id);
+
 }
