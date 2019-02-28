@@ -2,6 +2,8 @@ package ro.msg.learning.shop.odata;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ro.msg.learning.shop.entity.Address;
+import ro.msg.learning.shop.entity.Customer;
 import ro.msg.learning.shop.entity.Order;
 import ro.msg.learning.shop.entity.OrderDetail;
 import ro.msg.learning.shop.repository.OrderRepository;
@@ -52,22 +54,43 @@ public class CustomDataStore {
 
         data.put("Id", order.getId());
         data.put("ShippedFrom", order.getShippedFrom());
-        data.put("Address", order.getAddress());
-        data.put("Customer", order.getCustomer());
+        data.put("Address", createAddress(order.getAddress()));
+        data.put("Customer", createCustomer(order.getCustomer()));
         data.put("OrderDate", order.getOrderDate());
+
+        return data;
+    }
+
+    private Map<String, Object> createAddress(Address address) {
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("City", address.getCity());
+        data.put("Country", address.getCountry());
+        data.put("County", address.getCounty());
+        data.put("Street", address.getStreet());
+
+        return data;
+    }
+
+    private Map<String, Object> createCustomer(Customer customer) {
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("Id", customer.getId());
+        data.put("FirstName", customer.getFirstName());
+        data.put("LastName", customer.getLastName());
+        data.put("UserName", customer.getUserName());
 
         return data;
     }
 
     private List<Map<String, Object>> createOrderDetails(List<OrderDetail> orderDetails) {
         List<Map<String, Object>> dataList = new ArrayList<>();
-        Map<String, Object> data = new HashMap<>();
-
 
         for (OrderDetail orderDetail : orderDetails) {
-        data.put("Product", orderDetail.getProduct());
-        data.put("Quantity", orderDetail.getQuantity());
-        dataList.add(data);
+            Map<String, Object> data = new HashMap<>();
+            data.put("Product", orderDetail.getProduct());
+            data.put("Quantity", orderDetail.getQuantity());
+            dataList.add(data);
         }
 
         return dataList;

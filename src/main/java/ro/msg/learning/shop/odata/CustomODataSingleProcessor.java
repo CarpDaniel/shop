@@ -82,9 +82,9 @@ public class CustomODataSingleProcessor extends ODataSingleProcessor {
             entitySet = uriInfo.getStartEntitySet();
 
             if (ENTITY_SET_NAME_ORDER_DETAILS.equals(entitySet.getName())) {
-                return EntityProvider.writeFeed(contentType, entitySet, customDataStore.getOrders(), EntityProviderWriteProperties.serviceRoot(getContext().getPathInfo().getServiceRoot()).build());
-            } else if (ENTITY_SET_NAME_ORDERS.equals(entitySet.getName())) {
                 return EntityProvider.writeFeed(contentType, entitySet, customDataStore.getAllOrderDetails(), EntityProviderWriteProperties.serviceRoot(getContext().getPathInfo().getServiceRoot()).build());
+            } else if (ENTITY_SET_NAME_ORDERS.equals(entitySet.getName())) {
+                return EntityProvider.writeFeed(contentType, entitySet, customDataStore.getOrders(), EntityProviderWriteProperties.serviceRoot(getContext().getPathInfo().getServiceRoot()).build());
             }
 
             throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -96,7 +96,7 @@ public class CustomODataSingleProcessor extends ODataSingleProcessor {
             if (ENTITY_SET_NAME_ORDER_DETAILS.equals(entitySet.getName())) {
                 int orderDetailsKey = getKeyValue(uriInfo.getKeyPredicates().get(0));
 
-                List<Map<String, Object>> orderDetails = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> orderDetails = new ArrayList<>();
                 orderDetails.addAll(customDataStore.getOrderDetails(orderDetailsKey));
 
                 return EntityProvider.writeFeed(contentType, entitySet, orderDetails, EntityProviderWriteProperties.serviceRoot(getContext().getPathInfo().getServiceRoot()).build());

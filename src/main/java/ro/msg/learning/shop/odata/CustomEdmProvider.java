@@ -91,14 +91,9 @@ public class CustomEdmProvider extends EdmProvider {
                 navigationProperties.add(new NavigationProperty().setName("Order")
                         .setRelationship(ASSOCIATION_ORDER_DETAIL_ORDER).setFromRole(ROLE_1_1).setToRole(ROLE_1_2));
 
-                //Key
-                List<PropertyRef> keyProperties = new ArrayList<PropertyRef>();
-                keyProperties.add(new PropertyRef().setName("Id"));
-                Key key = new Key().setKeys(keyProperties);
-
                 return new EntityType().setName(ENTITY_TYPE_1_1.getName())
                         .setProperties(properties)
-                        .setKey(key)
+                        .setKey(new Key().setKeys(new ArrayList<>()))
                         .setNavigationProperties(navigationProperties);
 
             } else if (ENTITY_TYPE_1_2.getName().equals(edmFQName.getName())) {
@@ -144,7 +139,7 @@ public class CustomEdmProvider extends EdmProvider {
             }
             if (COMPLEX_TYPE_1_2.getName().equals(edmFQName.getName())) {
                 List<Property> properties = new ArrayList<Property>();
-                properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.String).setFacets(new Facets().setNullable(false)));
+                properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.Int64).setFacets(new Facets().setNullable(false)));
                 properties.add(new SimpleProperty().setName("FirstName").setType(EdmSimpleTypeKind.String));
                 properties.add(new SimpleProperty().setName("LastName").setType(EdmSimpleTypeKind.String));
                 properties.add(new SimpleProperty().setName("UserName").setType(EdmSimpleTypeKind.String));
