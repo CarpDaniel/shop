@@ -24,7 +24,7 @@ public class OrderService {
     private final CustomerRepository customerRepository;
 
     public List<Order> findAll() {
-        return (List<Order>) orderRepository.findAll();
+        return orderRepository.findAll();
     }
 
     public Order placeNewOrder(StructOrder order) {

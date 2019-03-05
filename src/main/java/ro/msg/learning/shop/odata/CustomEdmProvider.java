@@ -100,7 +100,7 @@ public class CustomEdmProvider extends EdmProvider {
 
                 //Properties
                 List<Property> properties = new ArrayList<Property>();
-                properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.Int64).setFacets(new Facets().setNullable(false)));
+                properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.Int64).setFacets(new Facets()));
                 properties.add(new SimpleProperty().setName("ShippedFrom").setType(EdmSimpleTypeKind.String).setFacets(new Facets()));
                 properties.add(new ComplexProperty().setName("Address").setType(new FullQualifiedName(NAMESPACE, "Address")));
                 properties.add(new ComplexProperty().setName("Customer").setType(new FullQualifiedName(NAMESPACE, "Customer")));
@@ -139,7 +139,7 @@ public class CustomEdmProvider extends EdmProvider {
             }
             if (COMPLEX_TYPE_1_2.getName().equals(edmFQName.getName())) {
                 List<Property> properties = new ArrayList<Property>();
-                properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.Int64).setFacets(new Facets().setNullable(false)));
+                properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.Int64));
                 properties.add(new SimpleProperty().setName("FirstName").setType(EdmSimpleTypeKind.String));
                 properties.add(new SimpleProperty().setName("LastName").setType(EdmSimpleTypeKind.String));
                 properties.add(new SimpleProperty().setName("UserName").setType(EdmSimpleTypeKind.String));

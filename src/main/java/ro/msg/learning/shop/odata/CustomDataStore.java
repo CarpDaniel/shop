@@ -1,11 +1,13 @@
 package ro.msg.learning.shop.odata;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.olingo.odata2.api.ep.entry.ODataEntry;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.entity.Address;
 import ro.msg.learning.shop.entity.Customer;
 import ro.msg.learning.shop.entity.Order;
 import ro.msg.learning.shop.entity.OrderDetail;
+import ro.msg.learning.shop.repository.CustomerRepository;
 import ro.msg.learning.shop.repository.OrderRepository;
 
 import java.util.ArrayList;
@@ -18,13 +20,14 @@ import java.util.Map;
 public class CustomDataStore {
 
     private final OrderRepository orderRepository;
+    private final CustomerRepository customerRepository;
 
-    Map<String, Object> getOrder(final Long id) {
+    public Map<String, Object> getOrder(final Long id) {
         Order order = orderRepository.findOrderById(id);
         return createOrder(order);
     }
 
-    List<Map<String, Object>> getOrders() {
+    public List<Map<String, Object>> getOrders() {
         List<Order> orderList = orderRepository.findAll();
         List<Map<String, Object>> res = new ArrayList<>();
 
@@ -34,19 +37,31 @@ public class CustomDataStore {
         return res;
     }
 
-    List<Map<String, Object>> getOrderDetails(final Integer orderId) {
+    public List<Map<String, Object>> getOrderDetails(final Integer orderId) {
         List<OrderDetail> orderDetails = orderRepository.findById(orderId.longValue()).get().getOrderDetail();
 
         return createOrderDetails(orderDetails);
     }
 
-    List<Map<String, Object>> getAllOrderDetails() {
+    public List<OrderDetail> getOrderDetailsFromMap(List<ODataEntry> orderDetailMap) {
+        return createOrderDetailsFromMap(orderDetailMap);
+    }
+
+    public List<Map<String, Object>> getAllOrderDetails() {
         List<Order> orders = orderRepository.findAll();
         List<Map<String, Object>> res = new ArrayList<>();
         for (Order order : orders) {
             res.addAll(createOrderDetails(order.getOrderDetail()));
         }
         return res;
+    }
+
+    public Customer saveCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    public Map<String, Object> saveOrder(Order order) {
+        return createOrder(orderRepository.save(order));
     }
 
     private Map<String, Object> createOrder(Order order) {
@@ -94,5 +109,19 @@ public class CustomDataStore {
         }
 
         return dataList;
+    }
+
+    private List<OrderDetail> createOrderDetailsFromMap(List<ODataEntry> orderDetailMap) {
+        List<OrderDetail> res = new ArrayList<>();
+
+        for (ODataEntry item : orderDetailMap) {
+            OrderDetail orderDetail = new OrderDetail();
+
+            orderDetail.setProduct(Integer.valueOf((String) item.getProperties().get("Product")));
+            orderDetail.setQuantity(Integer.valueOf((String) item.getProperties().get("Quantity")));
+
+            res.add(orderDetail);
+        }
+        return res;
     }
 }
